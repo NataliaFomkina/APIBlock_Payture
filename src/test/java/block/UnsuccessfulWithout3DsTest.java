@@ -13,30 +13,30 @@ import static io.restassured.RestAssured.given;
 import static org.testng.Assert.assertEquals;
 
 @Epic(value = "Двухстадийный платеж")
-@Feature(value = "Успешное блокирование без 3Ds")
-public class SuccessfulWithout3DsTest extends BaseTest {
+@Feature(value = "Неуспешное блокирование без 3Ds")
+public class UnsuccessfulWithout3DsTest extends BaseTest {
 
-    @Test (description = "TestCase № 2. Успешное блокирование средств при корректном заполнении всех обязательных параметров и отсутствии необязательных")
-    public void mandatoryFieldsWithoutOptionalTest(){
+    @Test (description = "TestCase № 8. Выдача ошибки WRONG_EXPIRE_DATE ")
+    public void wrongExpireDateTest(){
         String OrderId = getRandomUniqueOrderId(key);
         installSpecification(requestSpec(), responseSpec200());
         Map<String, Object> body = new HashMap<>();
         body.put("Key", key);
         body.put("OrderId", OrderId);
         body.put("Amount", getRandomInt());
-        body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
+        body.put("PayInfo", "PAN=" + unSuccessfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=19; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
         Response postResp = given()
-                    .formParams(body)
-                        .when()
-                        .post(TestConfig.PATH.Value + "Block")
-                        .then().log().all()
-                        .extract().response();
+                .formParams(body)
+                .when()
+                .post(TestConfig.PATH.Value + "Block")
+                .then().log().all()
+                .extract().response();
         String stringPostResponse = postResp.asString();
         XmlPath xmlPathPost = new XmlPath(stringPostResponse);
-        assertEquals(xmlPathPost.get("Block.@Success"), "True", "Метод POST. Параметр Success не соответствует ожидаемому");
+        assertEquals(xmlPathPost.get("Block.@Success"), "False", "Метод POST. Параметр Success не соответствует ожидаемому");
         assertEquals(xmlPathPost.get("Block.@OrderId"), body.get("OrderId"), "Метод POST. Параметр OrderId не соответствует ожидаемому");
         assertEquals(xmlPathPost.get("Block.@Key"), body.get("Key"), "Метод POST. Параметр Key не соответствует ожидаемому");
-        assertEquals(xmlPathPost.get("Block.@Amount"), body.get("Amount"), "Метод POST. Параметр Amount не соответствует ожидаемому");
+        assertEquals(xmlPathPost.get("Block.@ErrCode"), "WRONG_EXPIRE_DATE", "Метод POST. Параметр ErrCode не соответствует ожидаемому");
 
         OrderId = getRandomUniqueOrderId(key);
         body.put("OrderId", OrderId);
@@ -48,9 +48,9 @@ public class SuccessfulWithout3DsTest extends BaseTest {
                 .extract().response();
         String stringGetResponse = getResp.asString();
         XmlPath xmlPathGet = new XmlPath(stringGetResponse);
-        assertEquals(xmlPathGet.get("Block.@Success"), "True", "Метод GET. Параметр Success не соответствует ожидаемому");
+        assertEquals(xmlPathGet.get("Block.@Success"), "False", "Метод GET. Параметр Success не соответствует ожидаемому");
         assertEquals(xmlPathGet.get("Block.@OrderId"), body.get("OrderId"), "Метод GET. Параметр OrderId не соответствует ожидаемому");
         assertEquals(xmlPathGet.get("Block.@Key"), body.get("Key"), "Метод GET. Параметр Key не соответствует ожидаемому");
-        assertEquals(xmlPathGet.get("Block.@Amount"), body.get("Amount"), "Метод GET. Параметр Amount не соответствует ожидаемому");
+        assertEquals(xmlPathGet.get("Block.@ErrCode"), "WRONG_EXPIRE_DATE", "Метод GET. Параметр ErrCode не соответствует ожидаемому");
     }
 }
