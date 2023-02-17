@@ -4,12 +4,9 @@ import baseTest.BaseTest;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.restassured.path.xml.XmlPath;
-import io.restassured.response.Response;
 import org.testng.annotations.Test;
-import test_conf.props.TestConfig;
 import java.util.*;
 import static api.Specifications.*;
-import static io.restassured.RestAssured.given;
 import static org.testng.Assert.assertEquals;
 
 @Epic(value = "Двухстадийный платеж")
@@ -25,14 +22,7 @@ public class SuccessfulWithout3DsTest extends BaseTest {
         body.put("OrderId", OrderId);
         body.put("Amount", getRandomInt());
         body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
-        Response postResp = given()
-                    .formParams(body)
-                        .when()
-                        .post(TestConfig.PATH.Value + "Block")
-                        .then().log().all()
-                        .extract().response();
-        String stringPostResponse = postResp.asString();
-        XmlPath xmlPathPost = new XmlPath(stringPostResponse);
+        XmlPath xmlPathPost = sendPostBlockRequest(body);
         assertEquals(xmlPathPost.get("Block.@Success"), "True", "Метод POST. Параметр Success не соответствует ожидаемому");
         assertEquals(xmlPathPost.get("Block.@OrderId"), body.get("OrderId"), "Метод POST. Параметр OrderId не соответствует ожидаемому");
         assertEquals(xmlPathPost.get("Block.@Key"), body.get("Key"), "Метод POST. Параметр Key не соответствует ожидаемому");
@@ -40,14 +30,8 @@ public class SuccessfulWithout3DsTest extends BaseTest {
 
         OrderId = getRandomUniqueOrderId(key);
         body.put("OrderId", OrderId);
-        Response getResp = given()
-                .formParams(body)
-                .when()
-                .get(TestConfig.PATH.Value + "Block")
-                .then().log().all()
-                .extract().response();
-        String stringGetResponse = getResp.asString();
-        XmlPath xmlPathGet = new XmlPath(stringGetResponse);
+        body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
+        XmlPath xmlPathGet = sendGetBlockRequest(body);
         assertEquals(xmlPathGet.get("Block.@Success"), "True", "Метод GET. Параметр Success не соответствует ожидаемому");
         assertEquals(xmlPathGet.get("Block.@OrderId"), body.get("OrderId"), "Метод GET. Параметр OrderId не соответствует ожидаемому");
         assertEquals(xmlPathGet.get("Block.@Key"), body.get("Key"), "Метод GET. Параметр Key не соответствует ожидаемому");
