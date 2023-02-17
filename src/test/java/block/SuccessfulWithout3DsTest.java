@@ -15,11 +15,10 @@ public class SuccessfulWithout3DsTest extends BaseTest {
 
     @Test (description = "TestCase № 2. Успешное блокирование средств при корректном заполнении всех обязательных параметров и отсутствии необязательных")
     public void mandatoryFieldsWithoutOptionalTest(){
-        String OrderId = getRandomUniqueOrderId(key);
         installSpecification(requestSpec(), responseSpec200());
         Map<String, Object> body = new HashMap<>();
         body.put("Key", key);
-        body.put("OrderId", OrderId);
+        body.put("OrderId", getRandomUniqueOrderId(key));
         body.put("Amount", getRandomInt());
         body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
         XmlPath xmlPathPost = sendPostBlockRequest(body);
@@ -28,8 +27,7 @@ public class SuccessfulWithout3DsTest extends BaseTest {
         assertEquals(xmlPathPost.get("Block.@Key"), body.get("Key"), "Метод POST. Параметр Key не соответствует ожидаемому");
         assertEquals(xmlPathPost.get("Block.@Amount"), body.get("Amount"), "Метод POST. Параметр Amount не соответствует ожидаемому");
 
-        OrderId = getRandomUniqueOrderId(key);
-        body.put("OrderId", OrderId);
+        body.put("OrderId", getRandomUniqueOrderId(key));
         body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
         XmlPath xmlPathGet = sendGetBlockRequest(body);
         assertEquals(xmlPathGet.get("Block.@Success"), "True", "Метод GET. Параметр Success не соответствует ожидаемому");
