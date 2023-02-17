@@ -31,7 +31,7 @@ public class UnsuccessfulWithout3DsTest extends BaseTest {
         OrderId = getRandomUniqueOrderId(key);
         body.put("OrderId", OrderId);
         body.put("PayInfo", "PAN=" + unSuccessfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=19; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
-        XmlPath xmlPathGet = sendPostBlockRequest(body);
+        XmlPath xmlPathGet = sendGetBlockRequest(body);
         assertEquals(xmlPathGet.get("Block.@Success"), "False", "Метод GET. Параметр Success не соответствует ожидаемому");
         assertEquals(xmlPathGet.get("Block.@OrderId"), body.get("OrderId"), "Метод GET. Параметр OrderId не соответствует ожидаемому");
         assertEquals(xmlPathGet.get("Block.@Key"), body.get("Key"), "Метод GET. Параметр Key не соответствует ожидаемому");
