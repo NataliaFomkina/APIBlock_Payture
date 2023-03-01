@@ -4,7 +4,6 @@ import baseTest.BaseTest;
 import baseTest.ErrorCodes;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
-import io.restassured.path.xml.XmlPath;
 import org.testng.annotations.Test;
 import java.util.*;
 import static api.Specifications.*;
@@ -21,12 +20,10 @@ public class UnsuccessfulWithout3DsTest extends BaseTest {
         body.put("OrderId", getRandomOrderId());
         body.put("Amount", getRandomInt());
         body.put("PayInfo", "PAN=" + unSuccessfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=19; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
-        XmlPath postResponse = sendPostBlockRequest(body);
-        verifyUnsuccessfulWithout3DSPostResponse(postResponse, body, ErrorCodes.WRONG_EXPIRE_DATE);
+        sendPostBlockRequest(body).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
 
         body.put("OrderId", getRandomOrderId());
         body.put("PayInfo", "PAN=" + unSuccessfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=19; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
-        XmlPath getResponse = sendGetBlockRequest(body);
-        verifyUnsuccessfulWithout3DSGetResponse(getResponse, body, ErrorCodes.WRONG_EXPIRE_DATE);
+        sendGetBlockRequest(body).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
     }
 }

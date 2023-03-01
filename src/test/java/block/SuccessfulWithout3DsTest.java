@@ -3,7 +3,6 @@ package block;
 import baseTest.BaseTest;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
-import io.restassured.path.xml.XmlPath;
 import org.testng.annotations.Test;
 import java.util.*;
 import static api.Specifications.*;
@@ -20,12 +19,10 @@ public class SuccessfulWithout3DsTest extends BaseTest {
         body.put("OrderId", getRandomOrderId());
         body.put("Amount", getRandomInt());
         body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
-        XmlPath postResponse = sendPostBlockRequest(body);
-        verifySuccessfulWithout3DSPostResponse(postResponse, body);
+        sendPostBlockRequest(body).verifySuccessfulResponse();
 
         body.put("OrderId", getRandomOrderId());
         body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
-        XmlPath getResponse = sendGetBlockRequest(body);
-        verifySuccessfulWithout3DSGetResponse(getResponse, body);
+        sendGetBlockRequest(body).verifySuccessfulResponse();
     }
 }
