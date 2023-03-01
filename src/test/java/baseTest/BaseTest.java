@@ -3,9 +3,7 @@ package baseTest;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 import test_conf.props.TestConfig;
-import java.util.HashMap;
 import java.util.Map;
-import static api.Specifications.*;
 import static io.restassured.RestAssured.given;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.testng.Assert.assertEquals;
@@ -75,29 +73,8 @@ public class BaseTest {
         assertEquals(response.get("Block.@ErrCode"), error.toString(), "Метод POST. Параметр ErrCode не соответствует ожидаемому");
     }
 
-    public String getRandomUniqueOrderId(String key) {
-        String uniqueOrderId = "";
-        int randomStringLength;
-        installSpecification(requestSpec(), responseSpec200());
-        while(uniqueOrderId.equals("")) {
-            randomStringLength = (int) (Math.random() * 50) + 1;
-            String randomOrderId = randomAlphanumeric(randomStringLength);
-            Map<String, Object> body = new HashMap<>();
-            body.put("OrderId", randomOrderId);
-            body.put("Key",key);
-            Response resp =
-                    given()
-                            .formParams(body)
-                            .when()
-                            .get(TestConfig.PATH.Value + "GetState")
-                            .then().log().all()
-                            .extract().response();
-            String stringResponse = resp.asString();
-            XmlPath xmlPath = new XmlPath(stringResponse);
-            String state = xmlPath.get("GetState.@ErrCode");
-            if(state.equals("ORDER_NOT_FOUND")) uniqueOrderId = randomOrderId;
-        }
-        return uniqueOrderId;
+    public String getRandomOrderId() {
+        return randomAlphanumeric((int) (Math.random() * 50) + 1);
     }
 
     public String getRandomInt(){

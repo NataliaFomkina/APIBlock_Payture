@@ -17,13 +17,13 @@ public class SuccessfulWithout3DsTest extends BaseTest {
         installSpecification(requestSpec(), responseSpec200());
         Map<String, Object> body = new HashMap<>();
         body.put("Key", key);
-        body.put("OrderId", getRandomUniqueOrderId(key));
+        body.put("OrderId", getRandomOrderId());
         body.put("Amount", getRandomInt());
         body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
         XmlPath postResponse = sendPostBlockRequest(body);
         verifySuccessfulWithout3DSPostResponse(postResponse, body);
 
-        body.put("OrderId", getRandomUniqueOrderId(key));
+        body.put("OrderId", getRandomOrderId());
         body.put("PayInfo", "PAN=" + successfulCardWithout3Ds1.get("PAN") + "; EMonth=12; EYear=25; CardHolder=Ivan Ivanov; SecureCode=123;OrderId=" + body.get("OrderId") + "; Amount=" + body.get("Amount"));
         XmlPath getResponse = sendGetBlockRequest(body);
         verifySuccessfulWithout3DSGetResponse(getResponse, body);
