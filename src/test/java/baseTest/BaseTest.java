@@ -44,6 +44,15 @@ public class BaseTest {
                 .setCardHolder(card.getCardHolder())
                 .setSecureCode(card.getSecureCode());
     }
+
+    public Order generateOrder(Card card) {
+        PayInfo payInfo = generatePayInfo(card);
+        return new Order()
+                .setOrderId(payInfo.getOrderId())
+                .setKey(key)
+                .setAmount(payInfo.getAmount())
+                .setPayInfo(payInfo);
+    }
     public String getRandomOrderId() {
         return randomAlphanumeric((int) (Math.random() * 50) + 1);
     }

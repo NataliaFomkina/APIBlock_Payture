@@ -2,8 +2,6 @@ package block;
 
 import baseTest.BaseTest;
 import baseTest.ErrorCodes;
-import baseTest.Order;
-import baseTest.PayInfo;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
@@ -17,22 +15,7 @@ public class UnsuccessfulWithout3DsTest extends BaseTest {
     public void wrongExpireDateTest(){
         installSpecification(requestSpec(), responseSpec200());
 
-        PayInfo payInfoPost = generatePayInfo(unSuccessfulCardWithout3Ds1);
-        Order orderPost = new Order()
-                .setOrderId(payInfoPost.getOrderId())
-                .setKey(key)
-                .setAmount(payInfoPost.getAmount())
-                .setPayInfo(payInfoPost);
-
-        sendPostBlockRequest(orderPost).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
-
-        PayInfo payInfoGet = generatePayInfo(unSuccessfulCardWithout3Ds1);
-        Order orderGet = new Order()
-                .setOrderId(payInfoGet.getOrderId())
-                .setKey(key)
-                .setAmount(payInfoGet.getAmount())
-                .setPayInfo(payInfoGet);
-
-        sendPostBlockRequest(orderGet).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
+        sendPostBlockRequest(generateOrder(unSuccessfulCardWithout3Ds1)).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
+        sendGetBlockRequest(generateOrder(unSuccessfulCardWithout3Ds1)).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
     }
 }
