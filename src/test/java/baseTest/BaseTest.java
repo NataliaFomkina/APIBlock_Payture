@@ -3,6 +3,7 @@ package baseTest;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 import test_conf.props.TestConfig;
+
 import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
@@ -22,26 +23,26 @@ public class BaseTest {
             "EYear", "19");
     public static final String key = "Merchant";
 
-    public Transaction sendGetBlockRequest(Map<String,Object> data) {
+    public Transaction sendPostBlockRequest(Order order) {
         Response getResp = given()
-                .formParams(data)
-                .when()
-                .get(TestConfig.PATH.Value + "Block")
-                .then().log().all()
-                .extract().response();
-        String stringGetResponse = getResp.asString();
-        return new Transaction(data, new XmlPath(stringGetResponse));
-    }
-
-    public Transaction sendPostBlockRequest(Map<String,Object> data) {
-        Response getResp = given()
-                .formParams(data)
+                .formParams(order.convertToHashMap())
                 .when()
                 .post(TestConfig.PATH.Value + "Block")
                 .then().log().all()
                 .extract().response();
         String stringPostResponse = getResp.asString();
-        return new Transaction(data, new XmlPath(stringPostResponse));
+        return new Transaction(order, new XmlPath(stringPostResponse));
+    }
+
+    public Transaction sendGetBlockRequest(Order order) {
+        Response getResp = given()
+                .formParams(order.convertToHashMap())
+                .when()
+                .get(TestConfig.PATH.Value + "Block")
+                .then().log().all()
+                .extract().response();
+        String stringPostResponse = getResp.asString();
+        return new Transaction(order, new XmlPath(stringPostResponse));
     }
 
     public String getRandomOrderId() {
