@@ -47,22 +47,22 @@ public class PayInfo {
     }
 
     public PayInfo setOrderId(String orderId) {
-        OrderId = orderId;
+        this.OrderId = orderId;
         return this;
     }
 
     public PayInfo setAmount(String amount) {
-        Amount = amount;
+        this.Amount = amount;
         return this;
     }
 
     public PayInfo setSecureCode(String secureCode) {
-        SecureCode = secureCode;
+        this.SecureCode = secureCode;
         return this;
     }
 
     public PayInfo setCardHolder(String cardHolder) {
-        CardHolder = cardHolder;
+        this.CardHolder = cardHolder;
         return this;
     }
 
