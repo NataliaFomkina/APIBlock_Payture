@@ -17,35 +17,21 @@ public class UnsuccessfulWithout3DsTest extends BaseTest {
     public void wrongExpireDateTest(){
         installSpecification(requestSpec(), responseSpec200());
 
-        PayInfo payInfoPost = new PayInfo()
-                .setPAN(unSuccessfulCardWithout3Ds1.getPAN())
-                .setOrderId(getRandomOrderId())
-                .setAmount(getRandomInt())
-                .setEMonth(unSuccessfulCardWithout3Ds1.getEMonth())
-                .setEYear(unSuccessfulCardWithout3Ds1.getEYear())
-                .setCardHolder(unSuccessfulCardWithout3Ds1.getCardHolder())
-                .setSecureCode(unSuccessfulCardWithout3Ds1.getSecureCode());
+        PayInfo payInfoPost = generatePayInfo(unSuccessfulCardWithout3Ds1);
         Order orderPost = new Order()
                 .setOrderId(payInfoPost.getOrderId())
                 .setKey(key)
                 .setAmount(payInfoPost.getAmount())
-                .setPayInfo(payInfoPost.toString());
+                .setPayInfo(payInfoPost);
 
         sendPostBlockRequest(orderPost).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
 
-        PayInfo payInfoGet = new PayInfo()
-                .setPAN(unSuccessfulCardWithout3Ds1.getPAN())
-                .setOrderId(getRandomOrderId())
-                .setAmount(getRandomInt())
-                .setEMonth(unSuccessfulCardWithout3Ds1.getEMonth())
-                .setEYear(unSuccessfulCardWithout3Ds1.getEYear())
-                .setCardHolder(unSuccessfulCardWithout3Ds1.getCardHolder())
-                .setSecureCode(unSuccessfulCardWithout3Ds1.getSecureCode());
+        PayInfo payInfoGet = generatePayInfo(unSuccessfulCardWithout3Ds1);
         Order orderGet = new Order()
                 .setOrderId(payInfoGet.getOrderId())
                 .setKey(key)
                 .setAmount(payInfoGet.getAmount())
-                .setPayInfo(payInfoGet.toString());
+                .setPayInfo(payInfoGet);
 
         sendPostBlockRequest(orderGet).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
     }

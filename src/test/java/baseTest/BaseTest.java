@@ -34,6 +34,16 @@ public class BaseTest {
         return new Transaction(order, new XmlPath(stringPostResponse));
     }
 
+    public PayInfo generatePayInfo(Card card) {
+        return new PayInfo()
+                .setPAN(card.getPAN())
+                .setOrderId(getRandomOrderId())
+                .setAmount(getRandomInt())
+                .setEMonth(card.getEMonth())
+                .setEYear(card.getEYear())
+                .setCardHolder(card.getCardHolder())
+                .setSecureCode(card.getSecureCode());
+    }
     public String getRandomOrderId() {
         return randomAlphanumeric((int) (Math.random() * 50) + 1);
     }

@@ -49,8 +49,8 @@ public class Order {
         this.Amount = amount;
         return this;
     }
-    public Order setPayInfo(String payInfo) {
-        this.PayInfo = payInfo;
+    public Order setPayInfo(PayInfo payInfo) {
+        this.PayInfo = payInfo.toString();
         return this;
     }
     public Order setPaytureId(String paytureId) {

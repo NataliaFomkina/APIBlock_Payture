@@ -16,35 +16,21 @@ public class SuccessfulWithout3DsTest extends BaseTest {
     public void mandatoryFieldsWithoutOptionalTest(){
         installSpecification(requestSpec(), responseSpec200());
 
-        PayInfo payInfoPost = new PayInfo()
-                .setPAN(successfulCardWithout3Ds1.getPAN())
-                .setOrderId(getRandomOrderId())
-                .setAmount(getRandomInt())
-                .setEMonth(successfulCardWithout3Ds1.getEMonth())
-                .setEYear(successfulCardWithout3Ds1.getEYear())
-                .setCardHolder(successfulCardWithout3Ds1.getCardHolder())
-                .setSecureCode(successfulCardWithout3Ds1.getSecureCode());
+        PayInfo payInfoPost = generatePayInfo(successfulCardWithout3Ds1);
         Order orderPost = new Order()
                 .setOrderId(payInfoPost.getOrderId())
                 .setKey(key)
                 .setAmount(payInfoPost.getAmount())
-                .setPayInfo(payInfoPost.toString());
+                .setPayInfo(payInfoPost);
 
         sendPostBlockRequest(orderPost).verifySuccessfulResponse();
 
-        PayInfo payInfoGet = new PayInfo()
-                .setPAN(successfulCardWithout3Ds1.getPAN())
-                .setOrderId(getRandomOrderId())
-                .setAmount(getRandomInt())
-                .setEMonth(successfulCardWithout3Ds1.getEMonth())
-                .setEYear(successfulCardWithout3Ds1.getEYear())
-                .setCardHolder(successfulCardWithout3Ds1.getCardHolder())
-                .setSecureCode(successfulCardWithout3Ds1.getSecureCode());
+        PayInfo payInfoGet = generatePayInfo(successfulCardWithout3Ds1);
         Order orderGet = new Order()
                 .setOrderId(payInfoGet.getOrderId())
                 .setKey(key)
                 .setAmount(payInfoGet.getAmount())
-                .setPayInfo(payInfoGet.toString());
+                .setPayInfo(payInfoGet);
 
         sendGetBlockRequest(orderGet).verifySuccessfulResponse();
     }
