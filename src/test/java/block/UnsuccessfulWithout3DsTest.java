@@ -18,13 +18,13 @@ public class UnsuccessfulWithout3DsTest extends BaseTest {
         installSpecification(requestSpec(), responseSpec200());
 
         PayInfo payInfoPost = new PayInfo()
-                .setPAN(unSuccessfulCardWithout3Ds1.get("PAN"))
+                .setPAN(unSuccessfulCardWithout3Ds1.getPAN())
                 .setOrderId(getRandomOrderId())
                 .setAmount(getRandomInt())
-                .setEMonth(unSuccessfulCardWithout3Ds1.get("EMonth"))
-                .setEYear(unSuccessfulCardWithout3Ds1.get("EYear"))
-                .setCardHolder(unSuccessfulCardWithout3Ds1.get("CardHolder"))
-                .setSecureCode(unSuccessfulCardWithout3Ds1.get("SecureCode"));
+                .setEMonth(unSuccessfulCardWithout3Ds1.getEMonth())
+                .setEYear(unSuccessfulCardWithout3Ds1.getEYear())
+                .setCardHolder(unSuccessfulCardWithout3Ds1.getCardHolder())
+                .setSecureCode(unSuccessfulCardWithout3Ds1.getSecureCode());
         Order orderPost = new Order()
                 .setOrderId(payInfoPost.getOrderId())
                 .setKey(key)
@@ -34,13 +34,13 @@ public class UnsuccessfulWithout3DsTest extends BaseTest {
         sendPostBlockRequest(orderPost).verifyUnsuccessfulResponse(ErrorCodes.WRONG_EXPIRE_DATE);
 
         PayInfo payInfoGet = new PayInfo()
-                .setPAN(unSuccessfulCardWithout3Ds1.get("PAN"))
+                .setPAN(unSuccessfulCardWithout3Ds1.getPAN())
                 .setOrderId(getRandomOrderId())
                 .setAmount(getRandomInt())
-                .setEMonth(unSuccessfulCardWithout3Ds1.get("EMonth"))
-                .setEYear(unSuccessfulCardWithout3Ds1.get("EYear"))
-                .setCardHolder(unSuccessfulCardWithout3Ds1.get("CardHolder"))
-                .setSecureCode(unSuccessfulCardWithout3Ds1.get("SecureCode"));
+                .setEMonth(unSuccessfulCardWithout3Ds1.getEMonth())
+                .setEYear(unSuccessfulCardWithout3Ds1.getEYear())
+                .setCardHolder(unSuccessfulCardWithout3Ds1.getCardHolder())
+                .setSecureCode(unSuccessfulCardWithout3Ds1.getSecureCode());
         Order orderGet = new Order()
                 .setOrderId(payInfoGet.getOrderId())
                 .setKey(key)
