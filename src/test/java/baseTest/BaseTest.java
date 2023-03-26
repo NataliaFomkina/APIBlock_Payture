@@ -12,26 +12,28 @@ public class BaseTest {
     public static final Card unSuccessfulCardWithout3Ds1 = new Card("4400000000000008", "123", "12", "19", "Ivan Ivanov");
     public static final String key = "Merchant";
 
-    public Transaction sendPostBlockRequest(Order order) {
-        Response getResp = given()
-                .formParams(order.convertToHashMap())
-                .when()
-                .post(TestConfig.PATH.Value + "Block")
-                .then().log().all()
-                .extract().response();
-        String stringPostResponse = getResp.asString();
-        return new Transaction(order, new XmlPath(stringPostResponse));
-    }
-
-    public Transaction sendGetBlockRequest(Order order) {
-        Response getResp = given()
-                .formParams(order.convertToHashMap())
-                .when()
-                .get(TestConfig.PATH.Value + "Block")
-                .then().log().all()
-                .extract().response();
-        String stringPostResponse = getResp.asString();
-        return new Transaction(order, new XmlPath(stringPostResponse));
+    public Transaction sendRequest(APIMethods method, Order order) {
+        if (method ==  APIMethods.GET) {
+            Response getResp = given()
+                    .formParams(order.convertToHashMap())
+                    .when()
+                    .get(TestConfig.PATH.Value + "Block")
+                    .then().log().all()
+                    .extract().response();
+            String stringGetResponse = getResp.asString();
+            return new Transaction(order, new XmlPath(stringGetResponse));
+        } else if (method == APIMethods.POST) {
+            Response getResp = given()
+                    .formParams(order.convertToHashMap())
+                    .when()
+                    .post(TestConfig.PATH.Value + "Block")
+                    .then().log().all()
+                    .extract().response();
+            String stringPostResponse = getResp.asString();
+            return new Transaction(order, new XmlPath(stringPostResponse));
+        } else {
+           return null;
+        }
     }
 
     public PayInfo generatePayInfo(Card card) {
